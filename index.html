@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swing Pop Fes 2026 ～君の物語～</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple: #7c3aed;
+      --purple-light: #a855f7;
+      --pink: #ec4899;
+      --pink-light: #f9a8d4;
+      --gold: #f59e0b;
+      --gold-light: #fde68a;
+      --dark: #0f0720;
+      --dark2: #1a0a35;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: var(--dark);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ===== PARTICLES / STARS ===== */
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      animation: twinkle var(--d) ease-in-out infinite;
+      opacity: 0;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: var(--o); transform: scale(1); }
+    }
+
+    /* ===== FLOATING NOTES ===== */
+    .notes-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .note {
+      position: absolute;
+      font-size: var(--fs);
+      animation: floatNote var(--d) linear infinite;
+      opacity: 0;
+      color: var(--pink-light);
+    }
+    @keyframes floatNote {
+      0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.4; }
+      90% { opacity: 0.4; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 5rem 1rem 2rem;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(168, 85, 247, 0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 80% 80%, rgba(236, 72, 153, 0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 20% 70%, rgba(245, 158, 11, 0.15) 0%, transparent 60%);
+      z-index: 1;
+    }
+    .hero-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.75;
+      z-index: 0;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .hero-subtitle-top {
+      font-size: 0.9rem;
+      letter-spacing: 0.3em;
+      color: var(--gold-light);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px var(--gold);
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-style: italic;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fde68a 0%, #f9a8d4 40%, #c4b5fd 70%, #fde68a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      text-shadow: none;
+      filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.8));
+      margin-bottom: 0.3rem;
+    }
+    .hero-year {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 900;
+      color: var(--gold-light);
+      letter-spacing: 0.15em;
+      text-shadow: 0 0 20px var(--gold), 0 0 40px var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .hero-kimi {
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 0 20px var(--pink), 0 0 40px var(--purple);
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.1em;
+    }
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--pink-light);
+      letter-spacing: 0.2em;
+      text-shadow: 0 0 15px var(--pink);
+      margin-bottom: 2.5rem;
+    }
+    .hero-date-badge {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.6), rgba(236, 72, 153, 0.6));
+      border: 2px solid rgba(253, 230, 138, 0.6);
+      border-radius: 20px;
+      padding: 1rem 2.5rem;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      font-weight: 700;
+      color: var(--gold-light);
+      text-shadow: 0 0 10px var(--gold);
+      box-shadow: 0 0 30px rgba(245, 158, 11, 0.3), inset 0 0 20px rgba(255,255,255,0.05);
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+    }
+    .hero-date-first {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      background: linear-gradient(135deg, #fff 0%, var(--gold-light) 60%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      filter: drop-shadow(0 0 10px rgba(253,230,138,0.8));
+      line-height: 1;
+    }
+    .hero-venue {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 0.03em;
+      font-weight: 400;
+      text-shadow: none;
+      margin-top: 0.2rem;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--pink) 0%, var(--purple) 100%);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 1rem 3rem;
+      border-radius: 50px;
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      box-shadow: 0 0 30px rgba(236, 72, 153, 0.6), 0 0 60px rgba(124, 58, 237, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      border-radius: inherit;
+    }
+    .cta-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 10px 40px rgba(236, 72, 153, 0.8), 0 0 80px rgba(124, 58, 237, 0.6);
+    }
+    .scroll-arrow {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      animation: bounce 2s ease-in-out infinite;
+      color: rgba(255,255,255,0.5);
+      font-size: 2rem;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+
+    /* ===== SECTION BASE ===== */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+    .section-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 900;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+    .section-title span {
+      background: linear-gradient(135deg, var(--gold-light), var(--pink-light), #c4b5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--pink), var(--purple));
+      margin: 0.8rem auto 0;
+      border-radius: 2px;
+    }
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(168,85,247,0.5), rgba(236,72,153,0.5), transparent);
+      margin: 0;
+    }
+
+    /* ===== INFO SECTION ===== */
+    .info-section {
+      background: linear-gradient(180deg, var(--dark) 0%, var(--dark2) 50%, var(--dark) 100%);
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .info-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 16px;
+      padding: 1.5rem;
+      backdrop-filter: blur(10px);
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .info-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--purple-light);
+      box-shadow: 0 8px 30px rgba(124, 58, 237, 0.3);
+    }
+    .info-card-icon {
+      font-size: 2rem;
+      margin-bottom: 0.7rem;
+    }
+    .info-card-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--purple-light);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .info-card-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.5;
+    }
+    .info-card-sub {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.55);
+      margin-top: 0.3rem;
+    }
+
+    /* ===== TIME TABLE ===== */
+    .time-table {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+    .time-block {
+      background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(236,72,153,0.2));
+      border: 1px solid rgba(253,230,138,0.3);
+      border-radius: 16px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+    }
+    .time-block-label {
+      font-size: 0.8rem;
+      color: var(--gold-light);
+      letter-spacing: 0.2em;
+      margin-bottom: 0.5rem;
+    }
+    .time-block-time {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 20px var(--pink);
+    }
+    .time-note {
+      text-align: center;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: -1rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ===== TICKET ===== */
+    .ticket-section {
+      background: radial-gradient(ellipse 100% 80% at 50% 50%, rgba(124,58,237,0.12) 0%, transparent 70%);
+    }
+    .ticket-card {
+      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(236,72,153,0.15));
+      border: 2px solid rgba(253,230,138,0.4);
+      border-radius: 24px;
+      padding: 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 0 60px rgba(124,58,237,0.3);
+    }
+    .ticket-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, transparent 0%, rgba(253,230,138,0.05) 25%, transparent 50%);
+      animation: rotate 8s linear infinite;
+    }
+    @keyframes rotate { 100% { transform: rotate(360deg); } }
+    .ticket-price {
+      position: relative;
+      font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 900;
+      color: var(--gold-light);
+      text-shadow: 0 0 30px var(--gold), 0 0 60px var(--gold);
+      line-height: 1;
+    }
+    .ticket-price-unit {
+      font-size: 1.5rem;
+      vertical-align: middle;
+    }
+    .ticket-back {
+      position: relative;
+      margin-top: 1.5rem;
+      padding: 1rem 2rem;
+      background: rgba(255,255,255,0.07);
+      border-radius: 12px;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.8);
+    }
+    .ticket-back strong {
+      color: var(--gold-light);
+    }
+    .ticket-quota {
+      position: relative;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* ===== BENEFITS ===== */
+    .benefits-section {
+      background: linear-gradient(180deg, var(--dark2) 0%, var(--dark) 100%);
+    }
+    .benefit-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(168,85,247,0.25);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .benefit-item:hover {
+      transform: translateX(6px);
+      border-color: var(--pink);
+      box-shadow: 0 4px 20px rgba(236,72,153,0.2);
+    }
+    .benefit-num {
+      min-width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(168,85,247,0.5);
+      flex-shrink: 0;
+    }
+    .benefit-body h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      margin-bottom: 0.3rem;
+    }
+    .benefit-body p {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+    }
+
+    /* ===== FLOWER ===== */
+    .flower-section {
+      background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(236,72,153,0.1) 0%, transparent 70%);
+    }
+    .flower-card {
+      background: linear-gradient(135deg, rgba(236,72,153,0.15), rgba(124,58,237,0.1));
+      border: 1px solid rgba(236,72,153,0.4);
+      border-radius: 24px;
+      padding: 2.5rem;
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .flower-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .flower-card h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--pink-light);
+      margin-bottom: 1rem;
+    }
+    .flower-card p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.8;
+    }
+    .flower-card .highlight {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--gold-light);
+      text-shadow: 0 0 20px var(--gold);
+    }
+
+    /* ===== GENRES ===== */
+    .genres-section { }
+    .genre-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: center;
+    }
+    .genre-tag {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(168,85,247,0.4);
+      border-radius: 50px;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+      transition: all 0.2s;
+    }
+    .genre-tag:hover {
+      background: linear-gradient(135deg, rgba(124,58,237,0.4), rgba(236,72,153,0.3));
+      border-color: var(--pink);
+      transform: scale(1.05);
+      color: #fff;
+    }
+    .genre-note {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.9rem;
+    }
+
+    /* ===== FLYER ===== */
+    .flyer-section {
+      background: linear-gradient(180deg, var(--dark) 0%, var(--dark2) 100%);
+    }
+    .flyer-img {
+      display: block;
+      max-width: 500px;
+      width: 100%;
+      margin: 0 auto;
+      border-radius: 20px;
+      box-shadow: 0 0 60px rgba(124,58,237,0.5), 0 0 120px rgba(236,72,153,0.3);
+      border: 2px solid rgba(253,230,138,0.2);
+    }
+
+    /* ===== CTA ===== */
+    .cta-section {
+      background: radial-gradient(ellipse 100% 80% at 50% 50%, rgba(124,58,237,0.2) 0%, transparent 70%);
+      text-align: center;
+    }
+    .cta-section .section-inner { padding-bottom: 6rem; }
+    .urgent-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.3rem 1rem;
+      border-radius: 50px;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+      animation: pulse 2s ease-in-out infinite;
+      box-shadow: 0 0 20px rgba(220,38,38,0.6);
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(220,38,38,0.6); }
+      50% { box-shadow: 0 0 40px rgba(220,38,38,0.9), 0 0 60px rgba(220,38,38,0.4); }
+    }
+    .cta-section h2 {
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 0.8rem;
+      text-shadow: 0 0 30px rgba(168,85,247,0.6);
+    }
+    .cta-section p {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+    .cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .cta-btn-outline {
+      display: inline-block;
+      border: 2px solid var(--purple-light);
+      color: var(--purple-light);
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 0.9rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .cta-btn-outline:hover {
+      background: rgba(168,85,247,0.2);
+      border-color: var(--pink);
+      color: var(--pink-light);
+    }
+
+    /* ===== LINEUP ===== */
+    .lineup-section {
+      background: linear-gradient(180deg, var(--dark2) 0%, var(--dark) 100%);
+    }
+    .swing-banner {
+      background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(124,58,237,0.2));
+      border: 1px solid rgba(245,158,11,0.45);
+      border-radius: 20px;
+      padding: 1.6rem 2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .swing-banner::before {
+      content: '♪';
+      position: absolute;
+      font-size: 8rem;
+      opacity: 0.04;
+      top: -1rem;
+      left: 1rem;
+      line-height: 1;
+    }
+    .swing-banner::after {
+      content: '♫';
+      position: absolute;
+      font-size: 8rem;
+      opacity: 0.04;
+      bottom: -1.5rem;
+      right: 1rem;
+      line-height: 1;
+    }
+    .swing-banner-label {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--gold), #f97316);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      padding: 0.3rem 1rem;
+      border-radius: 50px;
+      margin-bottom: 0.8rem;
+      text-transform: uppercase;
+    }
+    .swing-banner h3 {
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      font-weight: 900;
+      color: var(--gold-light);
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 20px rgba(245,158,11,0.5);
+    }
+    .swing-banner p {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7;
+    }
+
+    .part-tabs {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+    .part-tab {
+      background: none;
+      border: 2px solid rgba(168,85,247,0.4);
+      border-radius: 50px;
+      padding: 0.6rem 2rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.55);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .part-tab.active {
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(168,85,247,0.5);
+    }
+    .part-tab:not(.active):hover {
+      border-color: var(--purple-light);
+      color: rgba(255,255,255,0.85);
+    }
+
+    .part-panel { display: none; }
+    .part-panel.active { display: block; }
+
+    .part-label {
+      text-align: center;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      color: var(--purple-light);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .part-time {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 20px var(--purple-light);
+      margin-bottom: 2rem;
+    }
+
+    .artist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1.5rem;
+    }
+    .artist-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      text-align: center;
+    }
+    .artist-photo {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 16px;
+      border: 2px solid rgba(168,85,247,0.35);
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(236,72,153,0.1));
+      position: relative;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .artist-card:hover .artist-photo {
+      border-color: var(--pink);
+      box-shadow: 0 0 25px rgba(236,72,153,0.35);
+    }
+    .artist-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .artist-photo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      color: rgba(255,255,255,0.3);
+    }
+    .artist-photo-placeholder span {
+      font-size: 2.2rem;
+    }
+    .artist-photo-placeholder p {
+      font-size: 0.65rem;
+      letter-spacing: 0.05em;
+    }
+    .artist-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+    }
+    .artist-card.tba .artist-photo {
+      border-style: dashed;
+      border-color: rgba(255,255,255,0.15);
+    }
+    .artist-card.tba .artist-name {
+      color: rgba(255,255,255,0.35);
+      font-size: 0.85rem;
+    }
+
+    /* ===== PERFORM LINK CARD ===== */
+    .perform-link-card {
+      display: block;
+      text-decoration: none;
+      background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(236,72,153,0.12));
+      border: 1px solid rgba(168,85,247,0.35);
+      border-radius: 24px;
+      padding: 3rem 2rem;
+      text-align: center;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .perform-link-card::before {
+      content: '🎤';
+      position: absolute;
+      font-size: 10rem;
+      opacity: 0.04;
+      bottom: -2rem;
+      right: 1rem;
+      line-height: 1;
+    }
+    .perform-link-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--pink);
+      box-shadow: 0 12px 40px rgba(236,72,153,0.25);
+    }
+    .perform-link-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--purple-light);
+      text-transform: uppercase;
+      margin-bottom: 0.7rem;
+    }
+    .perform-link-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--gold-light), var(--pink-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.8rem;
+    }
+    .perform-link-sub {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem 1rem;
+      border-top: 1px solid rgba(168,85,247,0.2);
+      color: rgba(255,255,255,0.35);
+      font-size: 0.8rem;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 7, 32, 0.6);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(168,85,247,0.2);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--gold-light), var(--pink-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--pink-light); }
+
+    /* ===== HAMBURGER ===== */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      padding: 6px;
+      background: none;
+      border: none;
+      z-index: 301;
+      position: relative;
+    }
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--gold-light);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* モバイルメニューオーバーレイ（navの外に独立配置） */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0f0720;
+      z-index: 200;
+      flex-direction: column;
+      padding: 80px 2rem 2rem;
+      overflow-y: auto;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--gold-light);
+      letter-spacing: 0.2em;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      opacity: 0.7;
+    }
+    .mobile-menu ul {
+      list-style: none;
+      width: 100%;
+    }
+    .mobile-menu ul li {
+      border-bottom: 1px solid rgba(168,85,247,0.25);
+    }
+    .mobile-menu ul li:first-child {
+      border-top: 1px solid rgba(168,85,247,0.25);
+    }
+    .mobile-menu ul li a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: 0.08em;
+    }
+    .mobile-menu ul li a::after {
+      content: '›';
+      font-size: 1.4rem;
+      color: var(--purple-light);
+    }
+    .mobile-menu ul li a:active { color: var(--gold-light); }
+
+    @media (max-width: 600px) {
+      .hamburger { display: flex; }
+      .nav-links { display: none; }
+
+      .hero {
+        min-height: unset;
+        justify-content: flex-start;
+        padding: 0 0 2rem;
+        align-items: center;
+      }
+      .hero::before { display: none; }
+      .hero-img {
+        position: relative;
+        inset: unset;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        display: block;
+        margin-top: 60px;
+      }
+      .hero-content {
+        margin-top: 1.5rem;
+        padding: 0 1rem;
+        z-index: 2;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Stars background -->
+<div class="stars" id="stars"></div>
+<!-- Floating notes background -->
+<div class="notes-bg" id="notes"></div>
+
+<!-- Navigation -->
+<nav>
+  <a href="#" class="nav-logo">Swing Pop Fes</a>
+  <button class="hamburger" id="hamburger" aria-label="メニュー">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links">
+    <li><a href="#lineup">出演者</a></li>
+    <li><a href="#info">イベント情報</a></li>
+    <li><a href="#ticket">チケット</a></li>
+    <li><a href="#flower">フラワーレイ</a></li>
+    <li><a href="perform.html">出演者募集</a></li>
+  </ul>
+</nav>
+
+<!-- モバイルメニュー（navの外に独立） -->
+<div class="mobile-menu" id="mobile-menu">
+  <p class="mobile-menu-title">Menu</p>
+  <ul>
+    <li><a href="#lineup" class="menu-close">出演者</a></li>
+    <li><a href="#info" class="menu-close">イベント情報</a></li>
+    <li><a href="#ticket" class="menu-close">チケット</a></li>
+    <li><a href="#flower" class="menu-close">フラワーレイ</a></li>
+    <li><a href="perform.html" class="menu-close">出演者募集</a></li>
+  </ul>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <img src="images/hero.jpg" alt="Swing Pop Fes" class="hero-img">
+  <div class="hero-content">
+    <p class="hero-tagline" style="display:none;">歌が物語になる一日。</p>
+    <div class="hero-date-badge">
+      <span class="hero-date-first">FIRST LIVE</span>
+      2026年7月26日（日）
+      <span class="hero-venue">Roxx SAKAE｜愛知県名古屋市中区錦3-6-15</span>
+    </div>
+    <a href="#lineup" class="cta-btn">出演アーティストを見る</a>
+  </div>
+  <div class="scroll-arrow">↓</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Lineup -->
+<section class="lineup-section" id="lineup">
+  <div class="section-inner">
+    <h2 class="section-title"><span>出演アーティスト</span></h2>
+
+    <!-- Tabs -->
+    <div class="part-tabs">
+      <button class="part-tab active" onclick="switchPart('part1', this)">第1部 13:00〜</button>
+      <button class="part-tab" onclick="switchPart('part2', this)">第2部 18:00〜</button>
+    </div>
+
+    <!-- Part 1 -->
+    <div class="part-panel active" id="part1">
+      <p class="part-label">Part 1</p>
+      <p class="part-time">13:00 START</p>
+      <div class="artist-grid">
+
+        <div class="artist-card">
+          <div class="artist-photo">
+            <img src="images/あみき.jpg" alt="あみき">
+          </div>
+          <div class="artist-name">あみき</div>
+        </div>
+
+        <div class="artist-card">
+          <div class="artist-photo">
+            <div class="artist-photo-placeholder"><span>🎤</span><p>Photo Coming Soon</p></div>
+          </div>
+          <div class="artist-name">うるとらぶるーみんぐ</div>
+        </div>
+
+        <div class="artist-card">
+          <div class="artist-photo">
+            <div class="artist-photo-placeholder"><span>🎤</span><p>Photo Coming Soon</p></div>
+          </div>
+          <div class="artist-name">北村翼紗</div>
+        </div>
+
+        <div class="artist-card">
+          <div class="artist-photo">
+            <img src="images/TEKONDO.jpg" alt="TEKONDO">
+          </div>
+          <div class="artist-name">TEKONDO</div>
+        </div>
+
+        <div class="artist-card">
+          <div class="artist-photo">
+            <div class="artist-photo-placeholder"><span>🎤</span><p>Photo Coming Soon</p></div>
+          </div>
+          <div class="artist-name">桐生華名</div>
+        </div>
+
+        <div class="artist-card">
+          <div class="artist-photo">
+            <img src="images/高山奈々.jpg" alt="高山奈々">
+          </div>
+          <div class="artist-name">MC：高山奈々</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Part 2 -->
+    <div class="part-panel" id="part2">
+      <p class="part-label">Part 2</p>
+      <p class="part-time">18:00 START</p>
+      <div class="artist-grid">
+
+        <div class="artist-card">
+          <div class="artist-photo">
+            <div class="artist-photo-placeholder"><span>🎤</span><p>Photo Coming Soon</p></div>
+          </div>
+          <div class="artist-name">芹なずな</div>
+        </div>
+
+        <div class="artist-card">
+          <div class="artist-photo">
+            <img src="images/まこつん.jpg" alt="まこつん">
+          </div>
+          <div class="artist-name">まこつん</div>
+        </div>
+
+        <div class="artist-card">
+          <div class="artist-photo">
+            <div class="artist-photo-placeholder"><span>🎤</span><p>Photo Coming Soon</p></div>
+          </div>
+          <div class="artist-name">まぁの</div>
+        </div>
+
+        <div class="artist-card">
+          <div class="artist-photo">
+            <div class="artist-photo-placeholder"><span>🎤</span><p>Photo Coming Soon</p></div>
+          </div>
+          <div class="artist-name">宮田大樹</div>
+        </div>
+
+        <div class="artist-card">
+          <div class="artist-photo">
+            <div class="artist-photo-placeholder"><span>🎤</span><p>Photo Coming Soon</p></div>
+          </div>
+          <div class="artist-name">Mizuka</div>
+        </div>
+
+        <div class="artist-card">
+          <div class="artist-photo">
+            <img src="images/椿紗奈.jpg" alt="椿紗奈">
+          </div>
+          <div class="artist-name">MC：椿紗奈</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Swing Pop Corner Banner -->
+    <div class="swing-banner" style="margin-top: 2.5rem;">
+      <div class="swing-banner-label">Special Corner</div>
+      <h3>Swing Pop Corner</h3>
+      <p>
+        アイドルソングやポップスを<strong style="color:var(--gold-light);">ジャズアレンジ</strong>で披露する特別コーナー。<br>
+        知っている曲が、新しいスウィングの物語に生まれ変わる。
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Info -->
+<section class="info-section" id="info">
+  <div class="section-inner">
+    <h2 class="section-title"><span>イベント情報</span></h2>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-icon">📅</div>
+        <div class="info-card-label">Date</div>
+        <div class="info-card-value">2026年7月26日（日）</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">📍</div>
+        <div class="info-card-label">Venue</div>
+        <div class="info-card-value">Roxx SAKAE</div>
+        <div class="info-card-sub">460-0003 愛知県名古屋市中区錦3-6-15<br>たての街ビルB2F</div>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:1rem;"><span>タイムテーブル</span></h2>
+    <div class="time-table">
+      <div class="time-block">
+        <div class="time-block-label">第1部</div>
+        <div class="time-block-time">13:00</div>
+      </div>
+      <div class="time-block">
+        <div class="time-block-label">第2部</div>
+        <div class="time-block-time">18:00</div>
+      </div>
+    </div>
+    <p class="time-note">※ 1部・2部それぞれ独立したステージです</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Ticket -->
+<section class="ticket-section" id="ticket">
+  <div class="section-inner">
+    <h2 class="section-title"><span>チケット</span></h2>
+    <div class="ticket-card">
+      <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-bottom: 0.5rem; position:relative;">観覧チケット</p>
+      <div class="ticket-price"><span class="ticket-price-unit">¥</span>4,000</div>
+      <p class="ticket-quota" style="margin-top:1.5rem;">各出演者よりお買い求めください</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Flower Lei -->
+<section class="flower-section" id="flower">
+  <div class="section-inner">
+    <h2 class="section-title"><span>🌸 フラワーレイ制度</span></h2>
+    <div class="flower-card">
+      <div class="flower-icon">💐</div>
+      <h3>お気に入りのアーティストを応援しよう</h3>
+      <p>
+        ステージ後に <span class="highlight">¥1,000</span> のお花を贈って応援！<br><br>
+        受け取った本数の <span class="highlight">50%</span> がアーティストへ還元されます。<br><br>
+        <span style="font-size: 0.85rem; color: rgba(255,255,255,0.5);">あなたの応援が、アーティストの力になります</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Flyer -->
+<section class="flyer-section">
+  <div class="section-inner">
+    <h2 class="section-title"><span>フライヤー</span></h2>
+    <img src="images/flyer.jpg" alt="Swing Pop Fes 2026 フライヤー" class="flyer-img">
+  </div>
+</section>
+
+<!-- Perform Link -->
+<section style="position:relative; z-index:1;">
+  <div class="section-inner" style="padding-top: 4rem; padding-bottom: 5rem;">
+    <a href="perform.html" class="perform-link-card">
+      <div class="perform-link-inner">
+        <p class="perform-link-label">For Performers</p>
+        <h2 class="perform-link-title">出演者募集</h2>
+        <p class="perform-link-sub">特典・応募方法・ジャンルなど詳しくはこちら →</p>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>© 2026 Swing Pop Fes ～君の物語～ All Rights Reserved.</p>
+  <p style="margin-top: 0.5rem;">Swing Pop Fes 制作委員会 愛知県知立市長田三丁目32番地3 2F</p>
+</footer>
+
+<script>
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  document.querySelectorAll('.menu-close').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+
+  // Generate stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 3 + 1;
+    s.style.cssText = `
+      width: ${size}px; height: ${size}px;
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      --d: ${Math.random() * 4 + 2}s;
+      --o: ${Math.random() * 0.8 + 0.2};
+      animation-delay: ${Math.random() * 5}s;
+    `;
+    starsEl.appendChild(s);
+  }
+
+  // Generate floating notes
+  const notesEl = document.getElementById('notes');
+  const noteSymbols = ['♪', '♫', '♬', '♩', '𝄞', '♭'];
+  for (let i = 0; i < 20; i++) {
+    const n = document.createElement('div');
+    n.className = 'note';
+    n.textContent = noteSymbols[Math.floor(Math.random() * noteSymbols.length)];
+    n.style.cssText = `
+      left: ${Math.random() * 100}%;
+      --fs: ${Math.random() * 1.5 + 0.8}rem;
+      --d: ${Math.random() * 15 + 10}s;
+      animation-delay: ${Math.random() * 10}s;
+    `;
+    notesEl.appendChild(n);
+  }
+
+  // Part tab switching
+  function switchPart(id, btn) {
+    document.querySelectorAll('.part-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.part-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>

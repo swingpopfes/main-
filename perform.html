@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>出演者募集 | Swing Pop Fes 2026 ～君の物語～</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple: #7c3aed;
+      --purple-light: #a855f7;
+      --pink: #ec4899;
+      --pink-light: #f9a8d4;
+      --gold: #f59e0b;
+      --gold-light: #fde68a;
+      --dark: #0f0720;
+      --dark2: #1a0a35;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: var(--dark);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Stars */
+    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d) ease-in-out infinite; opacity: 0; }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: var(--o); transform: scale(1); }
+    }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(15, 7, 32, 0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(168,85,247,0.2);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; font-size: 1.1rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold-light), var(--pink-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      text-decoration: none;
+    }
+    .nav-back {
+      color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.85rem;
+      display: flex; align-items: center; gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--pink-light); }
+
+    /* Hero */
+    .hero {
+      position: relative; min-height: 55vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 8rem 1.5rem 4rem; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(168,85,247,0.3) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 80%, rgba(236,72,153,0.2) 0%, transparent 60%);
+      z-index: 0;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, rgba(220,38,38,0.8), rgba(239,68,68,0.7));
+      color: #fff; font-size: 0.75rem; font-weight: 700;
+      padding: 0.35rem 1.2rem; border-radius: 50px; letter-spacing: 0.15em;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 0 20px rgba(220,38,38,0.5);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(220,38,38,0.5); }
+      50% { box-shadow: 0 0 35px rgba(220,38,38,0.8); }
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 700;
+      background: linear-gradient(135deg, #fde68a 0%, #f9a8d4 50%, #c4b5fd 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      filter: drop-shadow(0 0 20px rgba(168,85,247,0.6));
+      margin-bottom: 0.5rem; line-height: 1.1;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: rgba(255,255,255,0.6); letter-spacing: 0.1em; margin-bottom: 1.5rem;
+    }
+    .hero-event-info {
+      display: inline-flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(253,230,138,0.25);
+      border-radius: 50px; padding: 0.8rem 2rem;
+      font-size: 0.88rem; color: var(--gold-light);
+    }
+
+    /* Section base */
+    section { position: relative; z-index: 1; }
+    .section-inner { max-width: 860px; margin: 0 auto; padding: 4rem 1.5rem; }
+    .section-title { text-align: center; font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 900; margin-bottom: 2.5rem; }
+    .section-title span {
+      background: linear-gradient(135deg, var(--gold-light), var(--pink-light), #c4b5fd);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .section-title::after {
+      content: ''; display: block; width: 50px; height: 3px;
+      background: linear-gradient(90deg, var(--pink), var(--purple));
+      margin: 0.7rem auto 0; border-radius: 2px;
+    }
+    .divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(168,85,247,0.4), rgba(236,72,153,0.4), transparent);
+    }
+
+    /* Intro box */
+    .intro-box {
+      background: linear-gradient(135deg, rgba(124,58,237,0.18), rgba(236,72,153,0.12));
+      border: 1px solid rgba(168,85,247,0.35);
+      border-radius: 20px; padding: 2rem; text-align: center;
+      margin-bottom: 3rem;
+    }
+    .intro-box p { font-size: 1rem; color: rgba(255,255,255,0.8); line-height: 1.9; }
+    .intro-box strong { color: var(--gold-light); }
+
+    /* Benefits */
+    .benefit-list { display: flex; flex-direction: column; gap: 1.2rem; }
+    .benefit-item {
+      display: flex; align-items: flex-start; gap: 1.2rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(168,85,247,0.25);
+      border-radius: 16px; padding: 1.5rem;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .benefit-item:hover {
+      transform: translateX(6px); border-color: var(--pink);
+      box-shadow: 0 4px 20px rgba(236,72,153,0.2);
+    }
+    .benefit-num {
+      min-width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 1.1rem; color: #fff;
+      box-shadow: 0 0 15px rgba(168,85,247,0.5); flex-shrink: 0;
+    }
+    .benefit-body h3 { font-size: 1rem; font-weight: 700; color: var(--gold-light); margin-bottom: 0.3rem; }
+    .benefit-body p { font-size: 0.85rem; color: rgba(255,255,255,0.65); line-height: 1.6; }
+
+    /* Ticket info */
+    .ticket-info-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem;
+    }
+    .ticket-info-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(168,85,247,0.3);
+      border-radius: 16px; padding: 1.5rem; text-align: center;
+      transition: border-color 0.2s;
+    }
+    .ticket-info-card:hover { border-color: var(--purple-light); }
+    .ticket-info-card .icon { font-size: 1.8rem; margin-bottom: 0.6rem; }
+    .ticket-info-card .label { font-size: 0.7rem; letter-spacing: 0.2em; color: var(--purple-light); text-transform: uppercase; margin-bottom: 0.4rem; }
+    .ticket-info-card .value { font-size: 1.2rem; font-weight: 700; color: #fff; }
+    .ticket-info-card .note { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 0.4rem; line-height: 1.5; }
+    .ticket-info-card .highlight { color: var(--gold-light); font-weight: 700; }
+
+    /* Genres */
+    .genre-tags { display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center; }
+    .genre-tag {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(168,85,247,0.4);
+      border-radius: 50px; padding: 0.6rem 1.5rem;
+      font-size: 0.95rem; font-weight: 500; color: rgba(255,255,255,0.85);
+      transition: all 0.2s;
+    }
+    .genre-tag:hover {
+      background: linear-gradient(135deg, rgba(124,58,237,0.4), rgba(236,72,153,0.3));
+      border-color: var(--pink); transform: scale(1.05); color: #fff;
+    }
+    .genre-note { text-align: center; margin-top: 1.5rem; color: rgba(255,255,255,0.5); font-size: 0.9rem; }
+
+    /* CTA */
+    .cta-section { text-align: center; }
+    .cta-section .section-inner { padding-bottom: 6rem; }
+    .urgent-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: #fff; font-size: 0.8rem; font-weight: 700;
+      padding: 0.3rem 1rem; border-radius: 50px; letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+      animation: pulse 2s ease-in-out infinite;
+      box-shadow: 0 0 20px rgba(220,38,38,0.6);
+    }
+    .cta-section h2 { font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 900; margin-bottom: 0.8rem; text-shadow: 0 0 30px rgba(168,85,247,0.5); }
+    .cta-section p { font-size: 1rem; color: rgba(255,255,255,0.65); margin-bottom: 2.5rem; line-height: 1.8; }
+    .cta-group { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff; font-size: 1.1rem; font-weight: 700;
+      padding: 1rem 3rem; border-radius: 50px; text-decoration: none;
+      letter-spacing: 0.1em;
+      box-shadow: 0 0 30px rgba(236,72,153,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .cta-btn::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    }
+    .cta-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 10px 40px rgba(236,72,153,0.7);
+    }
+    .cta-btn-outline {
+      display: inline-block;
+      border: 2px solid var(--purple-light); color: var(--purple-light);
+      font-size: 1rem; font-weight: 700;
+      padding: 0.9rem 2.5rem; border-radius: 50px; text-decoration: none;
+      letter-spacing: 0.05em; transition: all 0.2s;
+    }
+    .cta-btn-outline:hover {
+      background: rgba(168,85,247,0.15); border-color: var(--pink-light); color: var(--pink-light);
+    }
+
+    /* Footer */
+    footer {
+      position: relative; z-index: 1; text-align: center;
+      padding: 2rem 1rem;
+      border-top: 1px solid rgba(168,85,247,0.2);
+      color: rgba(255,255,255,0.3); font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Swing Pop Fes</a>
+  <a href="index.html" class="nav-back">← イベントトップへ</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">🔥 出演枠 残りわずか！</div>
+    <h1>出演者募集</h1>
+    <p class="hero-sub">Swing Pop Fes 2026 ～君の物語～</p>
+    <div class="hero-event-info">
+      <span>📅 2026年7月26日（日）</span>
+      <span>📍 Roxx SAKAE / 名古屋</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Intro -->
+<section>
+  <div class="section-inner" style="padding-bottom: 2rem;">
+    <div class="intro-box">
+      <p>
+        好きなアイドルソングを<strong>ジャズアレンジで歌ってみませんか？</strong><br>
+        しかも、あなた専用にアレンジした楽曲を<strong>プレゼント</strong>します。<br>
+        ライブ・配信・歌ってみたなど、今後自由に使用OK！<br><br>
+        ジャンル不問。ソロでもユニットでも大歓迎です。
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Benefits -->
+<section>
+  <div class="section-inner">
+    <h2 class="section-title"><span>🎁 出演者特典</span></h2>
+    <div class="benefit-list">
+      <div class="benefit-item">
+        <div class="benefit-num">①</div>
+        <div class="benefit-body">
+          <h3>メイカーズピア野外ライブ 優先出演</h3>
+          <p>出演者は大型野外ライブへの優先出演権が得られます。さらなるステージへのチャンス！</p>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-num">②</div>
+        <div class="benefit-body">
+          <h3>ジャズアレンジ楽曲 制作プレゼント 🎶</h3>
+          <p>好きなアイドルソングをジャズアレンジで1曲制作してプレゼント！ライブ・配信・歌ってみたなど今後自由に使用可能。</p>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-num">③</div>
+        <div class="benefit-body">
+          <h3>MID-FM761 ラジオ番組 ゲスト出演</h3>
+          <p>地域FM局「MID-FM761」のラジオ番組にゲストとして出演。あなたの音楽を電波に乗せて届けよう！</p>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-num">④</div>
+        <div class="benefit-body">
+          <h3>公式SNSで出演者紹介</h3>
+          <p>イベント前に出演者を順番に公式SNSで紹介します。フォロワーへのPRにもなります！</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Ticket -->
+<section>
+  <div class="section-inner">
+    <h2 class="section-title"><span>チケット・ノルマ</span></h2>
+    <div class="ticket-info-grid">
+      <div class="ticket-info-card">
+        <div class="icon">🎫</div>
+        <div class="label">Ticket Price</div>
+        <div class="value"><span class="highlight">¥4,000</span></div>
+        <div class="note">観覧チケット（1枚）</div>
+      </div>
+      <div class="ticket-info-card">
+        <div class="icon">📋</div>
+        <div class="label">Noruma</div>
+        <div class="value"><span class="highlight">2枚</span> / 部</div>
+        <div class="note">1部出演につき2枚のノルマ</div>
+      </div>
+      <div class="ticket-info-card">
+        <div class="icon">💰</div>
+        <div class="label">Back</div>
+        <div class="value"><span class="highlight">¥1,000</span> バック</div>
+        <div class="note">3枚目以降、1枚につき¥1,000還元</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Flower Lei -->
+<section>
+  <div class="section-inner">
+    <h2 class="section-title"><span>🌸 フラワーレイ制度</span></h2>
+    <div style="
+      background: linear-gradient(135deg, rgba(236,72,153,0.12), rgba(124,58,237,0.1));
+      border: 1px solid rgba(236,72,153,0.35);
+      border-radius: 20px; padding: 2rem; text-align: center; max-width: 500px; margin: 0 auto;
+    ">
+      <div style="font-size:2.5rem; margin-bottom:1rem;">💐</div>
+      <p style="font-size:0.95rem; color:rgba(255,255,255,0.75); line-height:1.9;">
+        ステージ後、お客様が <strong style="color:var(--gold-light); font-size:1.2rem;">¥1,000</strong> のお花を贈って応援。<br>
+        取得本数の <strong style="color:var(--gold-light); font-size:1.2rem;">50%</strong> が出演者に還元されます。<br>
+        <span style="font-size:0.82rem; color:rgba(255,255,255,0.4); margin-top:0.5rem; display:block;">たくさん応援されるほどリターンも大きくなります</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Genres -->
+<section>
+  <div class="section-inner">
+    <h2 class="section-title"><span>🎶 ジャンル不問</span></h2>
+    <div class="genre-tags">
+      <span class="genre-tag">🎤 アイドル</span>
+      <span class="genre-tag">🌸 アニソン</span>
+      <span class="genre-tag">💫 ポップス</span>
+      <span class="genre-tag">🎼 演歌</span>
+      <span class="genre-tag">🎵 シンガー</span>
+      <span class="genre-tag">👥 ユニット</span>
+      <span class="genre-tag">🎙️ ソロ</span>
+      <span class="genre-tag">🎹 ボカロ</span>
+    </div>
+    <p class="genre-note">あなたのジャンル・スタイルで参加できます。幅広く募集中！</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-inner">
+    <div class="urgent-badge">🔥 出演枠 残りわずか！</div>
+    <h2>出演希望はDMで！</h2>
+    <p>
+      出演に興味のある方は、DMにて<br>
+      <strong style="color: var(--gold-light);">「出演希望」</strong> とご連絡ください。<br>
+      ご質問もお気軽にどうぞ！
+    </p>
+    <div class="cta-group">
+      <a href="https://twitter.com" class="cta-btn">✉ DMで出演希望を送る</a>
+      <a href="index.html" class="cta-btn-outline">← イベントトップへ</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Swing Pop Fes ～君の物語～ All Rights Reserved.</p>
+  <p style="margin-top: 0.5rem;">Swing Pop Fes 制作委員会 愛知県知立市長田三丁目32番地3 2F</p>
+</footer>
+
+<script>
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 100; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 3 + 1;
+    s.style.cssText = `
+      width: ${size}px; height: ${size}px;
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      --d: ${Math.random() * 4 + 2}s;
+      --o: ${Math.random() * 0.8 + 0.2};
+      animation-delay: ${Math.random() * 5}s;
+    `;
+    starsEl.appendChild(s);
+  }
+</script>
+</body>
+</html>
